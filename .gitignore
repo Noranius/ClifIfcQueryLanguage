@@ -1,0 +1,14 @@
+/packages
+/TestResults
+/System.CodeDom.5.0.0
+/CLIF.codegenerator/obj
+/CLIF.codegenerator/bin
+/CLIF.CodegeneratorTests/obj
+/CLIF.CodegeneratorTests/bin
+/CLIF.LibraryFactory/obj
+/CLIF.LibraryFactory/bin
+/CLIF.QueryEngine/bin
+/CLIF.QueryEngine/obj
+/CLIF.QueryEnvironment/obj
+/CLIF.QueryEnvironment/bin
+/.vs
