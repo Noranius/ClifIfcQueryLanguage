@@ -21,7 +21,24 @@ namespace CLIF.Tests
             try
             {
                 IfcQueryClassFactory fac = new IfcQueryClassFactory();
-                Assembly result = fac.GetQueryAssembly("FactoryTestResult", "CLIF.Tests", "from ifcEntity in model.Instances select ifcEntity");
+                Assembly result = fac.GetQueryAssembly("FactoryTestResult", "CLIF.Tests.CodeCompilation", "CLIF.Tests.CodeCompilation",
+                    LinqQueryCollection.BasicQuery);
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail(ex.ToString());
+            }
+        }
+
+        [TestMethod()]
+        public void TestCompilationWithQuotes()
+        {
+            try
+            {
+                IfcQueryClassFactory fac = new IfcQueryClassFactory();
+                string linqQuery = LinqQueryCollection.QuerySelectByTypeName;
+                Assembly result = fac.GetQueryAssembly("FactoryTestResult", "CLIF.Tests.TestCompilationWithQuotes", 
+                    "CLIF.Tests.TestCompilationWithQuotes", linqQuery);
             }
             catch (Exception ex)
             {

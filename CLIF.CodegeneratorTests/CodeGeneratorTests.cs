@@ -1,8 +1,8 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CLIF.Codegenerator;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using CLIF.Codegenerator;
 
 namespace CLIF.Tests
 {
@@ -16,8 +16,15 @@ namespace CLIF.Tests
         public void GetQueryCodeTest()
         {
             CSharpCodeFactory factory = new CSharpCodeFactory();
-            string result = factory.GetQueryCode("from ifcEntity in model.instances select ifcEntity", 
-                "ClifQueryTest", "CLIF.QueryTest");
+            string result = factory.GetQueryCode(LinqQueryCollection.BasicQuery, "ClifQueryTest", "CLIF.QueryTest");
+            Assert.IsTrue(true);
+        }
+
+        [TestMethod()]
+        public void QuotationTest()
+        {
+            CSharpCodeFactory factory = new CSharpCodeFactory();
+            string result = factory.GetQueryCode(LinqQueryCollection.QuerySelectByTypeName, "ClifQueryTest", "CLIF.QueryTest");
             Assert.IsTrue(true);
         }
     }

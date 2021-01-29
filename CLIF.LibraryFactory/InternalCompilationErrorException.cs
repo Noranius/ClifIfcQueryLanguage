@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 
 namespace CLIF.LibraryFactory
 {
@@ -9,11 +10,11 @@ namespace CLIF.LibraryFactory
     /// </summary>
     public class InternalCompilationErrorException : Exception
     {
-        public IEnumerable<string> InternalErrors { get; private set; }
+        public IReadOnlyList<string> InternalErrors { get; private set; }
 
-        public InternalCompilationErrorException(IEnumerable<string> enumerable) : base("Internal exceptions on compilitaions")
+        public InternalCompilationErrorException(IEnumerable<string> internalErrors) : base("Internal exceptions on compilitaions")
         {
-            this.InternalErrors = enumerable;
+            this.InternalErrors = internalErrors.ToList().AsReadOnly();
         }
 
         public override string ToString()

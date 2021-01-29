@@ -33,7 +33,7 @@ namespace CLIF.LibraryFactory
             };
         }
 
-        public Assembly GetQueryAssembly(string queryClassName, string classNamespace, string linqQuery)
+        public Assembly GetQueryAssembly(string queryClassName, string classNamespace, string assemblyName, string linqQuery)
         {
             CSharpCodeFactory csFactory = new CSharpCodeFactory();
             string classCode = csFactory.GetQueryCode(linqQuery, queryClassName, classNamespace);
@@ -42,7 +42,7 @@ namespace CLIF.LibraryFactory
             CSharpParseOptions options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp7_3);
             SyntaxTree parsedSyntaxTree = SyntaxFactory.ParseSyntaxTree(codeString, options);
 
-            CSharpCompilation compileResult = CSharpCompilation.Create(classNamespace + ".dll",
+            CSharpCompilation compileResult = CSharpCompilation.Create(assemblyName + ".dll",
                 new[] { parsedSyntaxTree },
                 references: IfcQueryClassFactory.references,
                 options: new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
@@ -61,29 +61,6 @@ namespace CLIF.LibraryFactory
             {
                 throw new InternalCompilationErrorException(emitResult.Diagnostics.Select(x => x.ToString()));
             }
-
-
-            //CompilerParameters compileParam = new CompilerParameters();
-
-            //compileParam.GenerateInMemory = true;
-            //compileParam.ReferencedAssemblies.Add("System.dll");
-            //compileParam.OutputAssembly = Path.Combine(Environment.CurrentDirectory, classNamespace + ".dll");
-            //compileParam.GenerateExecutable = false;
-            //compileParam.TreatWarningsAsErrors = false;
-            ////compileParam.ReferencedAssemblies.Add();
-
-            //CodeDomProvider domProvider = CodeDomProvider.CreateProvider("CSharp");
-
-            //CompilerResults compileResult = domProvider.CompileAssemblyFromSource(compileParam, classCode);
-
-            //if (compileResult.Errors.Count > 0)
-            //{
-            //    string additionalErrorInformation = string.Join(";\r\n", from CompilerError ex in compileResult.Errors
-            //                                                                select ex.ErrorText);
-
-            //    throw new ArgumentException("Error at compiling the provided source code. " + additionalErrorInformation);
-            //}
-            //return compileResult.CompiledAssembly;
         }
     }
 }

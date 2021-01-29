@@ -1,8 +1,4 @@
 ﻿using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
-using System.Collections.Generic;
-using System.IO;
 
 namespace CLIF.Codegenerator
 {
@@ -27,7 +23,7 @@ namespace CLIF.Codegenerator
             {
                 template.ClassNamespace = outputNamespace;
             }
-
+            
             return template.TransformText();
         }
     }

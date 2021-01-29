@@ -7,7 +7,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.8.0" />
     <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
-    <PackageReference Include="Xbim.Ifc" Version="5.1.323" />
+    <PackageReference Include="Xbim.Essentials" Version="5.1.323" />
   </ItemGroup>
 
   <ItemGroup>

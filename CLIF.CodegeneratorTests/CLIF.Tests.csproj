@@ -16,10 +16,15 @@
   <ItemGroup>
     <ProjectReference Include="..\CLIF.codegenerator\CLIF.Codegenerator.csproj" />
     <ProjectReference Include="..\CLIF.LibraryFactory\CLIF.LibraryFactory.csproj" />
+    <ProjectReference Include="..\CLIF.QueryEngine\CLIF.QueryEngine.csproj" />
+    <ProjectReference Include="..\CLIF.QueryEnvironment\CLIF.QueryEnvironment.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <None Update="Testdata\B_Damage_Types.ifc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Testdata\E1_VoidingFeature.ifc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

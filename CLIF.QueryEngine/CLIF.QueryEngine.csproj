@@ -4,4 +4,13 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Xbim.Essentials" Version="5.1.323" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CLIF.codegenerator\CLIF.Codegenerator.csproj" />
+    <ProjectReference Include="..\CLIF.LibraryFactory\CLIF.LibraryFactory.csproj" />
+  </ItemGroup>
+
 </Project>
