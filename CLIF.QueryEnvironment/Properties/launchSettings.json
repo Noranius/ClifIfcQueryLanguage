@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "CLIF.QueryEnvironment": {
+      "commandName": "Project",
+      "commandLineArgs": "-l=\"from ifcEntity in model.Instances where ifcEntity.ExpressType.ExpressName == IFCPROPERTYSET select ifcEntity\" i=\"Testdata\\B_Damage_Types.ifc\"",
+      "workingDirectory": "C:\\Users\\ripo9018\\source\\repos\\IfcQueryLanguage\\CLIF.CodegeneratorTests\\bin\\Debug\\netcoreapp3.1"
+    }
+  }
+}
