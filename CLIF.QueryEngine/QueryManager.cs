@@ -14,6 +14,9 @@ using Xbim.Common.Metadata;
 
 namespace CLIF.QueryEngine
 {
+    /// <summary>
+    /// Manages incoming queries
+    /// </summary>
     public class QueryManager
     {
         private IfcStore internalStore;
@@ -95,23 +98,39 @@ namespace CLIF.QueryEngine
         public void Delete(string linqQueryToDefineEntitiesToDelete)
         {
             IEnumerable<IPersistEntity> entitiesToDelete = this.Select(linqQueryToDefineEntitiesToDelete);
-            using (ITransaction transaction = this.internalStore.Model.BeginTransaction("delete entities"))
+            using ITransaction transaction = this.internalStore.Model.BeginTransaction("delete entities");
+            foreach (IPersistEntity entityToDelete in entitiesToDelete)
             {
-                foreach (IPersistEntity entityToDelete in entitiesToDelete)
-                {
-                    this.internalStore.Model.Delete(entityToDelete);
-                }
-                transaction.Commit();
+                this.internalStore.Model.Delete(entityToDelete);
             }
+            transaction.Commit();
         }
 
-        public void Insert <T>(T type) where T : IInstantiableEntity
+        /// <summary>
+        /// Performs a given action on the entities, which result from the query
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="linqQueryToDefineEntitiesToModify">query to define the entities for modification</param>
+        /// <param name="actionToPerform">Action to perform on entites</param>
+        public void Modify<T>(string linqQueryToDefineEntitiesToModify, Action<T> actionToPerform) where T : IPersistEntity
         {
-            using (ITransaction addTransaction = this.internalStore.Model.BeginTransaction("addEntity"))
-            {
-                this.internalStore.Model.Instances.New<T>();
-                addTransaction.Commit();
-            }
+            IEnumerable<T> entitesToModify = this.Select(linqQueryToDefineEntitiesToModify).Cast<T>();
+            this.internalStore.ForEach(entitesToModify, actionToPerform);
+        }
+
+        /// <summary>
+        /// Adds a new entity and performs the given action on it
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="actionToPerformAfterInsert"></param>
+        /// <returns></returns>
+        public T Insert<T>(Action<T> actionToPerformAfterInsert = null) where T : IInstantiableEntity
+        {
+            using ITransaction addTransaction = this.internalStore.BeginTransaction("addTransaction");
+            T result = this.internalStore.Model.Instances.New<T>();
+            actionToPerformAfterInsert?.Invoke(result);
+            addTransaction.Commit();
+            return result;
         }
 
         private IIfcSelectQueryClassCreator ExtractSelectQueryClassFromAssembly(Assembly parentAssembly)
