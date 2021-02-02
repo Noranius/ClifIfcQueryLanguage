@@ -4,6 +4,8 @@ using System.Reflection;
 using System.Text;
 using System.Linq;
 
+using CLIF.Common;
+
 namespace CLIF.Codegenerator
 {
     public partial class LinqQueryTemplate

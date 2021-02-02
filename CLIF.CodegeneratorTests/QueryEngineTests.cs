@@ -16,7 +16,7 @@ namespace CLIF.Tests
         {
             string ifcFile = @"TestData\B_Damage_Types.ifc";
             QueryManager engine = new QueryManager(ifcFile);
-            IEnumerable<IPersistEntity> result = engine.SelectEntities(LinqQueryCollection.BasicQuery);
+            IEnumerable<IPersistEntity> result = engine.Select(LinqQueryCollection.BasicQuery);
         }
 
         [TestMethod]
@@ -25,8 +25,8 @@ namespace CLIF.Tests
         {
             string ifcFile = @"TestData\B_Damage_Types.ifc";
             QueryManager engine = new QueryManager(ifcFile);
-            IEnumerable<IPersistEntity> result = engine.SelectEntities(LinqQueryCollection.BasicQuery);
-            result = engine.SelectEntities(LinqQueryCollection.DefectTypeQuery);
+            IEnumerable<IPersistEntity> result = engine.Select(LinqQueryCollection.BasicQuery);
+            result = engine.Select(LinqQueryCollection.DefectTypeQuery);
         }
 
         [TestMethod]
@@ -37,13 +37,33 @@ namespace CLIF.Tests
             {
                 string ifcFile = @"TestData\B_Damage_Types.ifc";
                 QueryManager engine = new QueryManager(ifcFile);
-                IEnumerable<IPersistEntity> result = engine.SelectEntities(LinqQueryCollection.DefectTypeQuery);
+                IEnumerable<IPersistEntity> result = engine.Select(LinqQueryCollection.DefectTypeQuery);
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.ToString());
                 Assert.Fail();
             }
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\B_Damage_Types.ifc")]
+        public void TestDeleteEntity()
+        {
+            string ifcFile = @"TestData\B_Damage_Types.ifc";
+            QueryManager engine = new QueryManager(ifcFile);
+            engine.Delete(LinqQueryCollection.DeleteSelectionQuery);
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"TestData\B_Damage_Types.ifc")]
+        public void TestOverwriteModel()
+        {
+            string ifcFile = @"TestData\B_Damage_Types.ifc";
+            QueryManager engine = new QueryManager(ifcFile);
+            engine.Delete(LinqQueryCollection.DeleteSelectionQuery);
+            string pathToStore = @"Testdata\OverridableTestFile.ifc";
+            engine.SaveModel(pathToStore);
         }
     }
 }

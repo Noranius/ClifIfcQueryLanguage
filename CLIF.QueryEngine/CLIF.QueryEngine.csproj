@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\CLIF.codegenerator\CLIF.Codegenerator.csproj" />
+    <ProjectReference Include="..\CLIF.Common\CLIF.Common.csproj" />
     <ProjectReference Include="..\CLIF.LibraryFactory\CLIF.LibraryFactory.csproj" />
   </ItemGroup>
 

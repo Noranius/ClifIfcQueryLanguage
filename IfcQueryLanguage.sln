@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIF.QueryEnvironment", "CL
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CLIF.Tests", "CLIF.CodegeneratorTests\CLIF.Tests.csproj", "{72810B7F-BBB1-48F3-BC52-C8726D427D26}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLIF.Common", "CLIF.Common\CLIF.Common.csproj", "{62E58A4C-3C8A-4312-B1BE-18B5E4E2D39B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{72810B7F-BBB1-48F3-BC52-C8726D427D26}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72810B7F-BBB1-48F3-BC52-C8726D427D26}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72810B7F-BBB1-48F3-BC52-C8726D427D26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62E58A4C-3C8A-4312-B1BE-18B5E4E2D39B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62E58A4C-3C8A-4312-B1BE-18B5E4E2D39B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62E58A4C-3C8A-4312-B1BE-18B5E4E2D39B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62E58A4C-3C8A-4312-B1BE-18B5E4E2D39B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

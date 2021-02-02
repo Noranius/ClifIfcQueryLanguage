@@ -12,3 +12,5 @@
 /CLIF.QueryEnvironment/obj
 /CLIF.QueryEnvironment/bin
 /.vs
+/CLIF.Common/bin
+/CLIF.Common/obj

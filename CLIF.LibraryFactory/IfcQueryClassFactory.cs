@@ -29,7 +29,7 @@ namespace CLIF.LibraryFactory
                 MetadataReference.CreateFromFile(typeof(Xbim.Ifc.IfcStore).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(Xbim.Common.IPersistEntity).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(Xbim.Ifc4.EntityFactoryIfc4).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(CLIF.Codegenerator.IIfcSelectQueryClassCreator).Assembly.Location)
+                MetadataReference.CreateFromFile(typeof(CLIF.Common.IIfcSelectQueryClassCreator).Assembly.Location)
             };
         }
 
@@ -55,7 +55,7 @@ namespace CLIF.LibraryFactory
             {
                 tempStream.Seek(0, SeekOrigin.Begin);
                 Assembly result = System.Runtime.Loader.AssemblyLoadContext.Default.LoadFromStream(tempStream);
-                return result; 
+                return result;
             }
             else
             {

@@ -1,13 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.1;net461</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
     <Description>This library offers the functionality to generate the code for a LINQ query on an IFC file by using xBIM.</Description>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="System.CodeDom" Version="5.0.0" />
     <PackageReference Include="Xbim.Ifc" Version="5.1.323" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\CLIF.Common\CLIF.Common.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -19,9 +23,9 @@
 
   <ItemGroup>
     <Compile Update="LinqQueryTemplate.cs">
+      <DependentUpon>LinqQueryTemplate.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>LinqQueryTemplate.tt</DependentUpon>
     </Compile>
     <Compile Update="LinQueryTemplateProperties.cs">
       <DependentUpon>LinqQueryTemplate.tt</DependentUpon>

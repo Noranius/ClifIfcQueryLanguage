@@ -2,10 +2,15 @@
 using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+
 using Xbim.Ifc;
 using Xbim.Common;
-using CLIF.Codegenerator;
+
+using CLIF.Common;
 using CLIF.LibraryFactory;
+using CLIF.Codegenerator;
+using Xbim.Common.Metadata;
 
 namespace CLIF.QueryEngine
 {
@@ -61,7 +66,7 @@ namespace CLIF.QueryEngine
         /// </summary>
         /// <param name="linqQuery">Query to perform</param>
         /// <returns></returns>
-        public IEnumerable<IPersistEntity> SelectEntities (string linqQuery)
+        public IEnumerable<IPersistEntity> Select (string linqQuery)
         {
             IIfcSelectQueryClassCreator queryClass;
 
@@ -80,11 +85,34 @@ namespace CLIF.QueryEngine
                 this.StoreNewSelectClass(linqQuery, queryClass);
             }
 
-            //var trans = this.internalStore.BeginTransaction();
-            //trans.
-
             return queryClass.Select(this.internalStore.Model);
-        }        
+        }
+
+        /// <summary>
+        /// Deletes all entites, which are filtered by the given Linq query
+        /// </summary>
+        /// <param name="linqQueryToDefineEntitiesToDelete">query to define the entities to delete</param>
+        public void Delete(string linqQueryToDefineEntitiesToDelete)
+        {
+            IEnumerable<IPersistEntity> entitiesToDelete = this.Select(linqQueryToDefineEntitiesToDelete);
+            using (ITransaction transaction = this.internalStore.Model.BeginTransaction("delete entities"))
+            {
+                foreach (IPersistEntity entityToDelete in entitiesToDelete)
+                {
+                    this.internalStore.Model.Delete(entityToDelete);
+                }
+                transaction.Commit();
+            }
+        }
+
+        public void Insert <T>(T type) where T : IInstantiableEntity
+        {
+            using (ITransaction addTransaction = this.internalStore.Model.BeginTransaction("addEntity"))
+            {
+                this.internalStore.Model.Instances.New<T>();
+                addTransaction.Commit();
+            }
+        }
 
         private IIfcSelectQueryClassCreator ExtractSelectQueryClassFromAssembly(Assembly parentAssembly)
         {
@@ -119,6 +147,15 @@ namespace CLIF.QueryEngine
             this.fifoLinqQueries.Enqueue(linqQuery);
             this.selectClassStorage.Add(linqQuery, queryClass);
             this.classCounter++;
+        }
+
+        /// <summary>
+        /// saves the current model
+        /// </summary>
+        /// <param name="pathToStore">location to save the model</param>
+        public void SaveModel (string pathToStore)
+        {
+            this.internalStore.SaveAs(pathToStore);
         }
     }
 }

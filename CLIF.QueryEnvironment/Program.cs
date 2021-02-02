@@ -10,6 +10,7 @@ using System.Reflection;
 using Xbim.Ifc;
 using Xbim.Common;
 using Xbim.Common.Metadata;
+using CLIF.Common;
 
 namespace CLIF.QueryEnvironment
 {

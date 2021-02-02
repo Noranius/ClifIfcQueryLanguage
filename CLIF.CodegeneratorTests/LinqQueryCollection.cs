@@ -11,5 +11,6 @@ namespace CLIF.Tests
         public static readonly string DefectTypeQuery = "from ifcProduct in (model.Instances.OfType<Xbim.Ifc4.Interfaces.IIfcProduct>()) " +
             "where (ifcProduct.IsTypedBy.Any() && ifcProduct.IsTypedBy.Any(x => x.RelatingType.Name.ToString().StartsWith(\"Damage type:\"))) " + 
             "select ifcProduct as Xbim.Ifc4.Interfaces.IIfcProduct";
+        public static readonly string DeleteSelectionQuery = "from ifcEntity in model.Instances where ifcEntity.EntityLabel == 9010 select ifcEntity";
     }
 }
