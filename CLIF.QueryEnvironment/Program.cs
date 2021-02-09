@@ -33,7 +33,7 @@ namespace CLIF.QueryEnvironment
                     IfcQueryClassFactory classFactory = new IfcQueryClassFactory();
                     string classNameSpace = "Clif.MainProgram";
                     string className = "MainProgramCompilitation";
-                    Assembly tempAssembly = classFactory.GetQueryAssembly(className, classNameSpace, classNameSpace, runOptions.LinqQueryString);
+                    Assembly tempAssembly = classFactory.GetSelectQueryAssembly(className, classNameSpace, classNameSpace, runOptions.LinqQueryString);
                     Type tempType = tempAssembly.GetType(classNameSpace + "." + className);
                     ConstructorInfo constructorInfo = tempType.GetConstructor(Type.EmptyTypes);
                     IIfcSelectQueryClassCreator queryClassInstance = (IIfcSelectQueryClassCreator)constructorInfo.Invoke(null);

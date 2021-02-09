@@ -21,7 +21,7 @@ namespace CLIF.Tests
             try
             {
                 IfcQueryClassFactory fac = new IfcQueryClassFactory();
-                Assembly result = fac.GetQueryAssembly("FactoryTestResult", "CLIF.Tests.CodeCompilation", "CLIF.Tests.CodeCompilation",
+                Assembly result = fac.GetSelectQueryAssembly("FactoryTestResult", "CLIF.Tests.CodeCompilation", "CLIF.Tests.CodeCompilation",
                     LinqQueryCollection.BasicQuery);
             }
             catch (Exception ex)
@@ -37,13 +37,21 @@ namespace CLIF.Tests
             {
                 IfcQueryClassFactory fac = new IfcQueryClassFactory();
                 string linqQuery = LinqQueryCollection.QuerySelectByTypeName;
-                Assembly result = fac.GetQueryAssembly("FactoryTestResult", "CLIF.Tests.TestCompilationWithQuotes", 
+                Assembly result = fac.GetSelectQueryAssembly("FactoryTestResult", "CLIF.Tests.TestCompilationWithQuotes",
                     "CLIF.Tests.TestCompilationWithQuotes", linqQuery);
             }
             catch (Exception ex)
             {
                 Assert.Fail(ex.ToString());
             }
+        }
+
+        [TestMethod]
+        public void TestUpdateCompilation()
+        {
+            IfcQueryClassFactory fac = new IfcQueryClassFactory();
+            Assembly result = fac.GetUpdateQueryAssembly("FactoryTestResult", typeof(Xbim.Ifc4.Kernel.IfcProduct), "entityToUpdate", "CLIF.Tests.TestUpdateCompilation",
+                    "CLIF.Tests.TestUpdateCompilation", LinqQueryCollection.MethodBodySimpleModification);
         }
     }
 }

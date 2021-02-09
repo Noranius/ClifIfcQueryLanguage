@@ -16,6 +16,7 @@ namespace CLIF.LibraryFactory
     {
 
         private static readonly MetadataReference[] references;
+        private CSharpCodeFactory internalCodeFactory = new CSharpCodeFactory();
 
         static IfcQueryClassFactory()
         {
@@ -29,16 +30,28 @@ namespace CLIF.LibraryFactory
                 MetadataReference.CreateFromFile(typeof(Xbim.Ifc.IfcStore).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(Xbim.Common.IPersistEntity).Assembly.Location),
                 MetadataReference.CreateFromFile(typeof(Xbim.Ifc4.EntityFactoryIfc4).Assembly.Location),
-                MetadataReference.CreateFromFile(typeof(CLIF.Common.IIfcSelectQueryClassCreator).Assembly.Location)
+                MetadataReference.CreateFromFile(typeof(Xbim.Ifc2x3.Functions).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(CLIF.Common.IIfcSelectQueryClassCreator).Assembly.Location),
+                MetadataReference.CreateFromFile(typeof(System.ComponentModel.INotifyPropertyChanged).Assembly.Location)
             };
         }
 
-        public Assembly GetQueryAssembly(string queryClassName, string classNamespace, string assemblyName, string linqQuery)
+        public Assembly GetSelectQueryAssembly(string queryClassName, string classNamespace, string assemblyName, string linqQuery)
         {
-            CSharpCodeFactory csFactory = new CSharpCodeFactory();
-            string classCode = csFactory.GetQueryCode(linqQuery, queryClassName, classNamespace);
+            string classCode = this.internalCodeFactory.GetSelectQueryCode(linqQuery, queryClassName, classNamespace);
+            return this.GenerateAssemblyFromCode(queryClassName, classNamespace, assemblyName, classCode);
+        }
 
-            SourceText codeString = SourceText.From(classCode);
+        public Assembly GetUpdateQueryAssembly (string queryClassName, Type inputParameterType, string inputParameterName, 
+            string classNamespace, string assemblyName, string methodBody)
+        {
+            string classCode = this.internalCodeFactory.GetUpdateQueryCode(methodBody, inputParameterType, inputParameterName, queryClassName, classNamespace);
+            return this.GenerateAssemblyFromCode(queryClassName, classNamespace, assemblyName, classCode);
+        }
+
+        private Assembly GenerateAssemblyFromCode(string queryClassName, string classNamespace, string assemblyName, string sourceCode)
+        {
+            SourceText codeString = SourceText.From(sourceCode);
             CSharpParseOptions options = CSharpParseOptions.Default.WithLanguageVersion(LanguageVersion.CSharp7_3);
             SyntaxTree parsedSyntaxTree = SyntaxFactory.ParseSyntaxTree(codeString, options);
 
@@ -59,7 +72,7 @@ namespace CLIF.LibraryFactory
             }
             else
             {
-                throw new InternalCompilationErrorException(emitResult.Diagnostics.Select(x => x.ToString()));
+                throw new InternalCompilationErrorException(emitResult.Diagnostics.Select(x => x.GetMessage()).ToArray());
             }
         }
     }

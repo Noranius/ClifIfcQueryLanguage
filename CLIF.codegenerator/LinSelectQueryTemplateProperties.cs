@@ -8,7 +8,7 @@ using CLIF.Common;
 
 namespace CLIF.Codegenerator
 {
-    public partial class LinqQueryTemplate
+    public partial class LinqSelectQueryTemplate
     {
         public string ClassNamespace { get; set; } = "CLIF.AutoQuery";
 
@@ -20,10 +20,10 @@ namespace CLIF.Codegenerator
 
         private static MethodInfo interfaceMethod;
 
-        static LinqQueryTemplate()
+        static LinqSelectQueryTemplate()
         {
-            LinqQueryTemplate.interfaceType = typeof(IIfcSelectQueryClassCreator);
-            LinqQueryTemplate.interfaceMethod = LinqQueryTemplate.interfaceType.GetMethods()[0];
+            LinqSelectQueryTemplate.interfaceType = typeof(IIfcSelectQueryClassCreator);
+            LinqSelectQueryTemplate.interfaceMethod = LinqSelectQueryTemplate.interfaceType.GetMethods()[0];
         }
     }
 }

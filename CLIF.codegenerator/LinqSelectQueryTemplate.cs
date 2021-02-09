@@ -20,9 +20,9 @@ namespace CLIF.Codegenerator
     /// Class to produce the template output
     /// </summary>
     
-    #line 1 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqQueryTemplate.tt"
+    #line 1 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqSelectQueryTemplate.tt"
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public partial class LinqQueryTemplate : LinqQueryTemplateBase
+    public partial class LinqSelectQueryTemplate : LinqSelectQueryTemplateBase
     {
 #line hidden
         /// <summary>
@@ -32,7 +32,7 @@ namespace CLIF.Codegenerator
         {
             this.Write(" \r\n");
             
-            #line 10 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqQueryTemplate.tt"
+            #line 10 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqSelectQueryTemplate.tt"
 
 
             
@@ -43,43 +43,43 @@ namespace CLIF.Codegenerator
                     "eric;\r\n\r\nusing Xbim.Ifc;\r\nusing Xbim.Common;\r\n\r\nusing CLIF.Common;\r\n\r\nnamespace " +
                     "");
             
-            #line 23 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqQueryTemplate.tt"
+            #line 23 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqSelectQueryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.ClassNamespace));
             
             #line default
             #line hidden
             this.Write("\r\n{\r\n\tpublic class ");
             
-            #line 25 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqQueryTemplate.tt"
+            #line 25 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqSelectQueryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.ClassName));
             
             #line default
             #line hidden
             this.Write(" : ");
             
-            #line 25 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqQueryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(LinqQueryTemplate.interfaceType.Name));
+            #line 25 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqSelectQueryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(LinqSelectQueryTemplate.interfaceType.Name));
             
             #line default
             #line hidden
             this.Write("\r\n\t{\r\n\t\t");
             
-            #line 27 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqQueryTemplate.tt"
+            #line 27 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqSelectQueryTemplate.tt"
 
-			IEnumerable<string> parameterStrings = from paramInfo in LinqQueryTemplate.interfaceMethod.GetParameters()
+			IEnumerable<string> parameterStrings = from paramInfo in LinqSelectQueryTemplate.interfaceMethod.GetParameters()
                                                    select (paramInfo.ParameterType.Name + " " + paramInfo.Name);
             string finalParamString = string.Join(", ", parameterStrings);
-			Type returnType = LinqQueryTemplate.interfaceMethod.ReturnType;
+			Type returnType = LinqSelectQueryTemplate.interfaceMethod.ReturnType;
 			string returnTypeString;
 			if (returnType.IsGenericType)
             {
 				Type[] genericArguments = returnType.GetGenericArguments();
-				returnTypeString = LinqQueryTemplate.interfaceMethod.ReturnType.Name.Split('`')[0] + 
+				returnTypeString = LinqSelectQueryTemplate.interfaceMethod.ReturnType.Name.Split('`')[0] + 
 					"<" + string.Join(",", genericArguments.Select(x => x.Name)) + ">";
             }
 			else
             {
-				returnTypeString = LinqQueryTemplate.interfaceMethod.ReturnType.Name;
+				returnTypeString = LinqSelectQueryTemplate.interfaceMethod.ReturnType.Name;
             }
 		
             
@@ -87,28 +87,28 @@ namespace CLIF.Codegenerator
             #line hidden
             this.Write("\t\tpublic ");
             
-            #line 44 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqQueryTemplate.tt"
+            #line 44 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqSelectQueryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(returnTypeString));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 44 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqQueryTemplate.tt"
-            this.Write(this.ToStringHelper.ToStringWithCulture(LinqQueryTemplate.interfaceMethod.Name));
+            #line 44 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqSelectQueryTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(LinqSelectQueryTemplate.interfaceMethod.Name));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 44 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqQueryTemplate.tt"
+            #line 44 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqSelectQueryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(finalParamString));
             
             #line default
             #line hidden
             this.Write(")\r\n\t\t{\r\n\t\t\treturn ");
             
-            #line 46 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqQueryTemplate.tt"
+            #line 46 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqSelectQueryTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.LinqQuery));
             
             #line default
@@ -125,7 +125,7 @@ namespace CLIF.Codegenerator
     /// Base class for this transformation
     /// </summary>
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.TextTemplating", "16.0.0.0")]
-    public class LinqQueryTemplateBase
+    public class LinqSelectQueryTemplateBase
     {
         #region Fields
         private global::System.Text.StringBuilder generationEnvironmentField;

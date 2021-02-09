@@ -13,10 +13,10 @@ namespace CLIF.Tests
         /// Tests the generation of the source code
         /// </summary>
         [TestMethod()]
-        public void GetQueryCodeTest()
+        public void GetSelectQueryCodeTest()
         {
             CSharpCodeFactory factory = new CSharpCodeFactory();
-            string result = factory.GetQueryCode(LinqQueryCollection.BasicQuery, "ClifQueryTest", "CLIF.QueryTest");
+            string result = factory.GetSelectQueryCode(LinqQueryCollection.BasicQuery, "ClifQueryTest", "CLIF.QueryTest");
             Assert.IsTrue(true);
         }
 
@@ -24,7 +24,18 @@ namespace CLIF.Tests
         public void QuotationTest()
         {
             CSharpCodeFactory factory = new CSharpCodeFactory();
-            string result = factory.GetQueryCode(LinqQueryCollection.QuerySelectByTypeName, "ClifQueryTest", "CLIF.QueryTest");
+            string result = factory.GetSelectQueryCode(LinqQueryCollection.QuerySelectByTypeName, "ClifQueryTest", "CLIF.QueryTest");
+            Assert.IsTrue(true);
+        }
+
+        /// <summary>
+        /// Tests the generation of the source code
+        /// </summary>
+        [TestMethod()]
+        public void GetUpdateQueryCodeTest()
+        {
+            CSharpCodeFactory factory = new CSharpCodeFactory();
+            string result = factory.GetUpdateQueryCode(LinqQueryCollection.MethodBodySimpleModification, typeof(Xbim.Ifc4.Interfaces.IIfcProduct), "entityToUpdate", "ClifQueryTest", "CLIF.QueryTest");
             Assert.IsTrue(true);
         }
     }

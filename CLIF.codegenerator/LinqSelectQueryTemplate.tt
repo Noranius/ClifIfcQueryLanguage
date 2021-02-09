@@ -22,26 +22,26 @@ using CLIF.Common;
 
 namespace <#=this.ClassNamespace#>
 {
-	public class <#=this.ClassName#> : <#=LinqQueryTemplate.interfaceType.Name#>
+	public class <#=this.ClassName#> : <#=LinqSelectQueryTemplate.interfaceType.Name#>
 	{
 		<#
-			IEnumerable<string> parameterStrings = from paramInfo in LinqQueryTemplate.interfaceMethod.GetParameters()
+			IEnumerable<string> parameterStrings = from paramInfo in LinqSelectQueryTemplate.interfaceMethod.GetParameters()
                                                    select (paramInfo.ParameterType.Name + " " + paramInfo.Name);
             string finalParamString = string.Join(", ", parameterStrings);
-			Type returnType = LinqQueryTemplate.interfaceMethod.ReturnType;
+			Type returnType = LinqSelectQueryTemplate.interfaceMethod.ReturnType;
 			string returnTypeString;
 			if (returnType.IsGenericType)
             {
 				Type[] genericArguments = returnType.GetGenericArguments();
-				returnTypeString = LinqQueryTemplate.interfaceMethod.ReturnType.Name.Split('`')[0] + 
+				returnTypeString = LinqSelectQueryTemplate.interfaceMethod.ReturnType.Name.Split('`')[0] + 
 					"<" + string.Join(",", genericArguments.Select(x => x.Name)) + ">";
             }
 			else
             {
-				returnTypeString = LinqQueryTemplate.interfaceMethod.ReturnType.Name;
+				returnTypeString = LinqSelectQueryTemplate.interfaceMethod.ReturnType.Name;
             }
 		#>
-		public <#=returnTypeString#> <#=LinqQueryTemplate.interfaceMethod.Name#>(<#=finalParamString#>)
+		public <#=returnTypeString#> <#=LinqSelectQueryTemplate.interfaceMethod.Name#>(<#=finalParamString#>)
 		{
 			return <#=this.LinqQuery#>;
 		}

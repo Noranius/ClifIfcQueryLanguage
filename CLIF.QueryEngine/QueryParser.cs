@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Linq;
 
-namespace CLIF.QueryEnvironment
+namespace CLIF.QueryEngine
 {
     /// <summary>
     /// Class to split up queries for further usage
@@ -11,61 +11,16 @@ namespace CLIF.QueryEnvironment
     /// <remarks>
     /// from ... in ... --> select statement; = could be prefix
     /// delete ... in ... --> delete statement; no prefix
-    /// insert ... in ... --> add statement
-    /// update ... in ... set ... --> update statement</remarks>
-    internal class QueryParser
+    /// insert xbim. ... in ... { ... }--> add statement
+    /// update ... in ... where ... { ... }--> update statement</remarks>
+    public class QueryParser
     {
-        internal enum QueryTypeEnum
-        {
-            SELECT,
-            DELETE,
-            UPDATE,
-            INSERT
-        }
-
-        /// <summary>
-        /// class to represent the information for update queries
-        /// </summary>
-        internal class ModifyQueryInformation
-        {
-            /// <summary>
-            /// select query to define entities for update
-            /// </summary>
-            internal string SelectQuery { get; set; }
-
-            /// <summary>
-            /// body for the action to perform on every selected entity
-            /// </summary>
-            internal string MethodBody { get; set; }
-
-            /// <summary>
-            /// object type of the modified objects
-            /// </summary>
-            internal string ObjectType { get; set; }
-        }
-
-        /// <summary>
-        /// class to represent the information for an insert statement
-        /// </summary>
-        internal class InsertQueryInformation
-        {
-            /// <summary>
-            /// type to insert
-            /// </summary>
-            internal string ObjectType { get; set; }
-
-            /// <summary>
-            /// optional method to perform
-            /// </summary>
-            internal string MethodBody { get; set; }
-        }
-
         /// <summary>
         /// Checks whether the query is a query for select
         /// </summary>
         /// <param name="query"></param>
         /// <returns></returns>
-        internal QueryTypeEnum GetQueryType(string query)
+        public QueryTypeEnum GetQueryType(string query)
         {
             string[] parts = query.Split(" ");
             if (parts.Length < 1)
@@ -94,11 +49,17 @@ namespace CLIF.QueryEnvironment
             }
         }
 
-        internal string GetLinqStringDelete(string linqDeleteQuery)
+        /// <summary>
+        /// retrieve the data to delete elements
+        /// </summary>
+        /// <param name="linqDeleteQuery"></param>
+        /// <returns></returns>
+        public DeleteQueryInformation GetDeleteIInformation(string linqDeleteQuery)
         {
             string[] parts = linqDeleteQuery.Split(" ");
             parts[0] = "select";
-            return string.Join(" ", parts);
+            string selectString = string.Join(" ", parts);
+            return new DeleteQueryInformation() { SelectStatement = selectString };
         }
 
         /// <summary>
@@ -108,13 +69,15 @@ namespace CLIF.QueryEnvironment
         /// </summary>
         /// <param name="linqModify"></param>
         /// <returns>query string to select entities for update</returns>
-        internal ModifyQueryInformation GetUpdateInformation(string linqModify)
+        public UpdateQueryInformation GetUpdateInformation(string linqModify)
         {
-            string[] selectAndMethod = new string[2];
-            int bracketPosition = linqModify.IndexOf('{');
-            selectAndMethod[0] = linqModify.Substring(0, bracketPosition);
-            selectAndMethod[1] = linqModify.Substring(bracketPosition);
-            ModifyQueryInformation result = new ModifyQueryInformation();
+            if (linqModify.IndexOf("{") == -1)
+            {
+                throw new ArgumentException("Start of Method body not found. The Method body starts with '{'.");
+            }
+
+            string[] selectAndMethod = this.SplitByFirstOccurence(linqModify, "{");
+            UpdateQueryInformation result = new UpdateQueryInformation();
 
             //replace only first update
             string updateString = "update";
@@ -124,8 +87,9 @@ namespace CLIF.QueryEnvironment
             //retrieve data type
             string[] selectQueryParts = result.SelectQuery.Split(" ");
             result.ObjectType = selectQueryParts[1];
+            result.EntityName = selectQueryParts[2];
             selectQueryParts[1] = string.Empty;
-            result.SelectQuery = string.Join(" ", selectQueryParts).Replace("  ", " ") + "select (" + result.ObjectType + ")ifcEntity";
+            result.SelectQuery = string.Join(" ", selectQueryParts).Replace("  ", " ") + "select (" + result.ObjectType + ")" + result.EntityName;
 
             result.MethodBody = selectAndMethod[1].Substring(1, selectAndMethod[1].Length - 2);
             return result;
@@ -136,9 +100,37 @@ namespace CLIF.QueryEnvironment
         /// </summary>
         /// <param name="linqInsert"></param>
         /// <returns></returns>
-        internal string GetInsertInformation(string linqInsert)
+        public InsertQueryInformation GetInsertInformation(string linqInsert)
         {
+            InsertQueryInformation result = new InsertQueryInformation();
+            string objectTypeString;
 
+            //extract method body
+            if (linqInsert.IndexOf("{") == -1)
+            {
+                result.MethodBody = string.Empty;
+                objectTypeString = linqInsert;
+            }
+            else
+            {
+                string[] partsEntireQuery = this.SplitByFirstOccurence(linqInsert, "{");
+                result.MethodBody = partsEntireQuery[1].Substring(1, partsEntireQuery[1].Length - 2);
+                objectTypeString = partsEntireQuery[1].Substring(1, partsEntireQuery[1].Length - 2);
+            }
+
+            //extract object type
+            string[] partsInsert = objectTypeString.Split(" ");
+            result.ObjectType = partsInsert[1];
+            return result;
+        }
+
+        private string[] SplitByFirstOccurence (string sourceString, string delimiter)
+        {
+            string[] result = new string[2];
+            int bracketPosition = sourceString.IndexOf(delimiter);
+            result[0] = sourceString.Substring(0, bracketPosition);
+            result[1] = sourceString.Substring(bracketPosition);
+            return result;
         }
     }
 }

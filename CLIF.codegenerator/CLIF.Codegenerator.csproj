@@ -15,20 +15,32 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="LinqQueryTemplate.tt">
+    <None Update="LinqModificationTemplate.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>LinqQueryTemplate.cs</LastGenOutput>
+      <LastGenOutput>LinqModificationTemplate.cs</LastGenOutput>
+    </None>
+    <None Update="LinqSelectQueryTemplate.tt">
+      <Generator>TextTemplatingFilePreprocessor</Generator>
+      <LastGenOutput>LinqSelectQueryTemplate.cs</LastGenOutput>
     </None>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="LinqQueryTemplate.cs">
-      <DependentUpon>LinqQueryTemplate.tt</DependentUpon>
+    <Compile Update="LinqModificationTemplate.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>LinqModificationTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="LinqModificationTemplateProperties.cs">
+      <DependentUpon>LinqModificationTemplate.tt</DependentUpon>
+    </Compile>
+    <Compile Update="LinqSelectQueryTemplate.cs">
+      <DependentUpon>LinqSelectQueryTemplate.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="LinQueryTemplateProperties.cs">
-      <DependentUpon>LinqQueryTemplate.tt</DependentUpon>
+    <Compile Update="LinSelectQueryTemplateProperties.cs">
+      <DependentUpon>LinqSelectQueryTemplate.tt</DependentUpon>
     </Compile>
   </ItemGroup>
 
