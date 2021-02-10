@@ -22,12 +22,12 @@ namespace CLIF.QueryEngine
         private IfcStore internalStore;
         private int classCounter = 1;
         private readonly string internalNameSpace = typeof(QueryManager).Namespace;
-        private readonly string classPrefix = "SelectQuery";
+        private readonly string classPrefix = "QueryClass";
         private readonly Dictionary<string, object> selectClassStorage = new Dictionary<string, object>();
         private readonly Queue<string> fifoLinqQueries = new Queue<string>();
         private readonly IfcQueryClassFactory ifcQueryFactory = new IfcQueryClassFactory();
         private int maximumStoredQueries = 500;
-        private QueryParser internalParser = new QueryParser();
+        private readonly QueryParser internalParser = new QueryParser();
 
         /// <summary>
         /// maximum number of queries stored in memory
@@ -113,7 +113,7 @@ namespace CLIF.QueryEngine
         /// </summary>
         /// <param name="linqQueryToDefineEntitiesToModify"></param>
         /// <param name="methodBody"></param>
-        public void Update(string linqQueryToDefineEntitiesToModify, Type inputParameterType, string inputParameterName, string methodBody)
+        public IEnumerable<IPersistEntity> Update(string linqQueryToDefineEntitiesToModify, Type inputParameterType, string inputParameterName, string methodBody)
         {
             string className = this.GetNewClassName();
             string assemblyName = this.GetNewAssemblyName();
@@ -121,8 +121,10 @@ namespace CLIF.QueryEngine
                 internalNameSpace, assemblyName, methodBody);
             IUpdateEntity UpdateClass = this.SimpleQueryClassExtraction<IUpdateEntity>(updateAssembly);
             IEnumerable<IPersistEntity> updateEntities = this.Select(linqQueryToDefineEntitiesToModify);
+            using ITransaction updateTrans = this.internalStore.BeginTransaction("update with user query");
             UpdateClass.UpdateEntities(updateEntities, this.internalStore);
-
+            updateTrans.Commit();
+            return updateEntities;
         }
 
         /// <summary>
@@ -130,23 +132,29 @@ namespace CLIF.QueryEngine
         /// </summary>
         /// <param name="linqQueryToDefineEntitiesToModify"></param>
         /// <param name="methodBody"></param>
-        public void Update(string linqQueryToDefineEntitiesToModify, string inputParameterType, string inputParameterName, string methodBody)
+        /// <param name="inputParameterName">Name of the input parameter in methodBody</param>
+        /// <param name="inputParameterType">Assembly qualified name of the parameter type</param>
+        public IEnumerable<IPersistEntity> Update(string linqQueryToDefineEntitiesToModify, string inputParameterType, string inputParameterName, string methodBody)
         {
-            Type inputType = Type.GetType(inputParameterType); Problem: Assembly qualified name...
-            this.Update(linqQueryToDefineEntitiesToModify, inputType, inputParameterName, methodBody);
+            Type inputType = Type.GetType(inputParameterType);
+            if (inputType == null) 
+            {
+                throw new ArgumentException("No such type found " + inputParameterType);
+            }
+            return this.Update(linqQueryToDefineEntitiesToModify, inputType, inputParameterName, methodBody);
         }
 
         /// <summary>
         /// Adds a new entity and performs the given action on it
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="actionToPerformAfterInsert"></param>
+        /// <param name="nameOfTypeToInsert">assembly qualified name of the type to insert</param>
         /// <returns></returns>
-        public T Insert<T>(Action<T> actionToPerformAfterInsert = null) where T : IInstantiableEntity
+        public IInstantiableEntity Insert(string nameOfTypeToInsert)
         {
             using ITransaction addTransaction = this.internalStore.BeginTransaction("addTransaction");
-            T result = this.internalStore.Model.Instances.New<T>();
-            actionToPerformAfterInsert?.Invoke(result);
+            Type typeToInsert = Type.GetType(nameOfTypeToInsert);
+            IInstantiableEntity result = (IInstantiableEntity)this.internalStore.Model.Instances.New(typeToInsert);
             addTransaction.Commit();
             return result;
         }
@@ -170,8 +178,9 @@ namespace CLIF.QueryEngine
                 result.Error = ex;
                 return result;
             }
-            
+
             //perform different queries
+            string assemblyQualifiedTypeName;
             try
             {
                 switch (result.QueryType)
@@ -187,9 +196,27 @@ namespace CLIF.QueryEngine
 
                     case QueryTypeEnum.UPDATE:
                         UpdateQueryInformation updateInformation = this.internalParser.GetUpdateInformation(linqQuery);
-                        this.Update(updateInformation.SelectQuery, updateInformation.ObjectType, updateInformation.EntityName, updateInformation.MethodBody);
+                        assemblyQualifiedTypeName = this.GetAssemblyQualifiedTypeName(updateInformation.ObjectType);
+                        result.ReturnedObject = this.Update(updateInformation.SelectQuery, assemblyQualifiedTypeName, updateInformation.EntityName, updateInformation.MethodBody);
                         break;
+
+                    case QueryTypeEnum.INSERT:
+                        UpdateQueryInformation insertInformation = this.internalParser.GetInsertInformation(linqQuery);
+                        assemblyQualifiedTypeName = this.GetAssemblyQualifiedTypeName(insertInformation.ObjectType);
+                        IInstantiableEntity newEntity = this.Insert(assemblyQualifiedTypeName);
+                        if (!string.IsNullOrEmpty(insertInformation.MethodBody))
+                        {
+                            string selectStatement = "from " + " ifcEntity in model.Instances where ifcEntity.EntityLabel == "
+                                + newEntity.EntityLabel.ToString() + " select (" + insertInformation.ObjectType + ") ifcEntity";
+                            this.Update(selectStatement, assemblyQualifiedTypeName, insertInformation.EntityName, insertInformation.MethodBody);
+                        }
+                        result.ReturnedObject = newEntity;
+                        break;
+
+                    default:
+                        throw new InvalidOperationException("Unknown query Type");
                 }
+                result.Success = true;
             }
             catch (Exception ex)
             {
@@ -199,7 +226,19 @@ namespace CLIF.QueryEngine
             return result;
         }
 
-        //private T ExtractQueryClassFromAssembly<T>(Assembly parentAssembly)
+        /// <summary>
+        /// Returns the assembly qualified type name of the ifc classes.
+        /// </summary>
+        /// <param name="typeName">Full name of the type</param>
+        /// <returns>Assembly qualified name of the type</returns>
+        /// <remarks>The first two parts of the namespace are most times the assembly name within xBIM</remarks>
+        public string GetAssemblyQualifiedTypeName (string typeName)
+        {
+            string[] parts = typeName.Split('.');
+            return typeName + ", " + parts[0] + "." + parts[1];
+        }
+
+        //private T ExtractQueryByInterfaceType<T>(Assembly parentAssembly)
         //{
         //    Type interfaceType = typeof(T);
         //    Type queryClass = parentAssembly.ExportedTypes.FirstOrDefault(x => x.GetInterface(interfaceType.Name) != null);

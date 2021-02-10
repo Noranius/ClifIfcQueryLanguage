@@ -9,10 +9,10 @@ namespace CLIF.QueryEngine
     /// Class to split up queries for further usage
     /// </summary>
     /// <remarks>
-    /// from ... in ... --> select statement; = could be prefix
-    /// delete ... in ... --> delete statement; no prefix
-    /// insert xbim. ... in ... { ... }--> add statement
-    /// update ... in ... where ... { ... }--> update statement</remarks>
+    /// from ... in ... --> select statement;
+    /// delete ... in ... --> delete statement;
+    /// insert [insert type] ... in ... { ... }--> add statement
+    /// update [update type] ... in ... where ... { ... }--> update statement</remarks>
     public class QueryParser
     {
         /// <summary>
@@ -57,8 +57,36 @@ namespace CLIF.QueryEngine
         public DeleteQueryInformation GetDeleteIInformation(string linqDeleteQuery)
         {
             string[] parts = linqDeleteQuery.Split(" ");
-            parts[0] = "select";
-            string selectString = string.Join(" ", parts);
+            parts[0] = "from";
+            string entityName = null;
+            string entityType = null;
+            for (int i = 0; i < parts.Length; i++)
+            {
+                if (parts[i] == "in")
+                {
+                    entityName = parts[i - 1];
+                    if (i == 3)
+                    {
+                        entityType = parts[1];
+                    }
+                    break;
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(entityName))
+            {
+                throw new ArgumentException("In token not found");
+            }
+
+            string selectString;
+            if (entityType == null)
+            {
+                selectString = string.Join(" ", parts) + " select " + entityName;
+            }
+            else
+            {
+                selectString = string.Join(" ", parts) + " select (" + entityType + ")" + entityName;
+            }
             return new DeleteQueryInformation() { SelectStatement = selectString };
         }
 
@@ -100,9 +128,9 @@ namespace CLIF.QueryEngine
         /// </summary>
         /// <param name="linqInsert"></param>
         /// <returns></returns>
-        public InsertQueryInformation GetInsertInformation(string linqInsert)
+        public UpdateQueryInformation GetInsertInformation(string linqInsert)
         {
-            InsertQueryInformation result = new InsertQueryInformation();
+            UpdateQueryInformation result = new UpdateQueryInformation();
             string objectTypeString;
 
             //extract method body
@@ -115,12 +143,13 @@ namespace CLIF.QueryEngine
             {
                 string[] partsEntireQuery = this.SplitByFirstOccurence(linqInsert, "{");
                 result.MethodBody = partsEntireQuery[1].Substring(1, partsEntireQuery[1].Length - 2);
-                objectTypeString = partsEntireQuery[1].Substring(1, partsEntireQuery[1].Length - 2);
+                objectTypeString = partsEntireQuery[0];
             }
 
-            //extract object type
+            //extract object type and entity name
             string[] partsInsert = objectTypeString.Split(" ");
             result.ObjectType = partsInsert[1];
+            result.EntityName = partsInsert[2];
             return result;
         }
 
