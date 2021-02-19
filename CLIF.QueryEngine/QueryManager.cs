@@ -72,19 +72,19 @@ namespace CLIF.QueryEngine
         /// <returns></returns>
         public IEnumerable<IPersistEntity> Select (string linqQuery)
         {
-            IIfcSelectQueryClassCreator queryClass;
+            ISelectEntity queryClass;
 
             if (this.selectClassStorage.ContainsKey(linqQuery))
             {
                 //select statement already known
-                queryClass = this.selectClassStorage[linqQuery] as IIfcSelectQueryClassCreator;
+                queryClass = this.selectClassStorage[linqQuery] as ISelectEntity;
             }
             else
             {
                 string className = this.GetNewClassName();
                 string assemblyName = this.GetNewAssemblyName(); 
                 Assembly queryAssembly = this.ifcQueryFactory.GetSelectQueryAssembly(className, internalNameSpace, assemblyName, linqQuery);
-                queryClass = this.SimpleQueryClassExtraction<IIfcSelectQueryClassCreator>(queryAssembly);
+                queryClass = this.SimpleQueryClassExtraction<ISelectEntity>(queryAssembly);
                 
                 this.StoreNewClass(linqQuery, queryClass);
             }

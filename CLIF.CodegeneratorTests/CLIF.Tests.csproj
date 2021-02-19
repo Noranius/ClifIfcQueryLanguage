@@ -31,6 +31,9 @@
     <None Update="Testdata\G_Beam_with_corroded_reinforcement_Round_IfcVoidingFeature.ifc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Update="Testdata\QueryTestFile.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

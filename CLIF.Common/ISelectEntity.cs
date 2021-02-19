@@ -7,7 +7,7 @@ namespace CLIF.Common
     /// <summary>
     /// An interface to define the methods to query IFC information
     /// </summary>
-    public interface IIfcSelectQueryClassCreator
+    public interface ISelectEntity
     {
         /// <summary>
         /// Searches with the linq query in the provided IFC model

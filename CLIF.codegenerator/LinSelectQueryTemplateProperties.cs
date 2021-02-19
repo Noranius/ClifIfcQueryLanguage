@@ -22,7 +22,7 @@ namespace CLIF.Codegenerator
 
         static LinqSelectQueryTemplate()
         {
-            LinqSelectQueryTemplate.interfaceType = typeof(IIfcSelectQueryClassCreator);
+            LinqSelectQueryTemplate.interfaceType = typeof(ISelectEntity);
             LinqSelectQueryTemplate.interfaceMethod = LinqSelectQueryTemplate.interfaceType.GetMethods()[0];
         }
     }
