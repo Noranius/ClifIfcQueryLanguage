@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>netcoreapp3.1</TargetFrameworks>
+    <RuntimeIdentifiers>win10-x64;win10-x86;ubuntu.20.04-x64;ubuntu.20.04-x86</RuntimeIdentifiers>
     <Description>This library offers the functionality to generate the code for a LINQ query on an IFC file by using xBIM.</Description>
   </PropertyGroup>
 
