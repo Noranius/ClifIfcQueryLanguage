@@ -1,0 +1,2 @@
+﻿from ifcEntity in model.Instances where ifcEntity.ExpressType.ExpressName == "IfcPropertySet" select ifcEntity
+from ifcEntity in model.Instances where ifcEntity.ExpressType.Name == "IfcBeam" select ifcEntity
