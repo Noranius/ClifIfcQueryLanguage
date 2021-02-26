@@ -17,10 +17,16 @@ string ifcQuery = "from ifcEntity in model.Instances where ifcEntity.ExpressType
 CLIF.QueryEngine.QueryResult result = qManager.PerformQuery(ifcQuery);
 ```
 
+In case of changes in the IFC model, remember to save the new model.
+
+```
+qManager.SaveModel("C:\\my\\path\\newmodel.ifc")
+```
+
 Another possibility is to use the console application `CLIF.QueryEnvironment` which loads an IFC file and processes a command or text file with multiple commands. The example below shows the command line to execute a single query.
 
 ```
-QueryEnvironment.exe -i="TestData\B_Damage_Types.ifc" -q="from ifcEntity in model.Instances where ifcEntity.ExpressType.Name == ""IfcBeam"" select ifcEntity"
+QueryEnvironment.exe -i="TestData\B_Damage_Types.ifc" -q="from ifcEntity in model.Instances where ifcEntity.ExpressType.Name == ""IfcBeam"" select ifcEntity" -s="C:\my\path\newmodel.ifc"
 ```
 
 ## Using basic LINQ for the IFC files

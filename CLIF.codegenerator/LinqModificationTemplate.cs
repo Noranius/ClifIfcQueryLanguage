@@ -128,86 +128,93 @@ string nameInternalMethod = "InternalUpdateMethod";
             
             #line default
             #line hidden
-            this.Write("\r\n\t\tpublic ");
+            this.Write("\r\n\t\tprivate Xbim.Common.IModel model;\r\n\r\n\t\tpublic ");
             
-            #line 84 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 86 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(returnTypeString));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 84 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 86 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(LinqModificationTemplate.interfaceMethod.Name));
             
             #line default
             #line hidden
             this.Write("(");
             
-            #line 84 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 86 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(finalParamString));
             
             #line default
             #line hidden
-            this.Write(")\r\n\t\t{\r\n\t\t\t");
+            this.Write(")\r\n\t\t{\r\n\t\t\tthis.model = ");
             
-            #line 86 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 88 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            this.Write(this.ToStringHelper.ToStringWithCulture(storeName));
+            
+            #line default
+            #line hidden
+            this.Write(".Model;\r\n\t\t\t");
+            
+            #line 89 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(storeName));
             
             #line default
             #line hidden
             this.Write(".ForEach<");
             
-            #line 86 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 89 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.InputParameterTypeFullName));
             
             #line default
             #line hidden
             this.Write(">(");
             
-            #line 86 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 89 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(entitiesName));
             
             #line default
             #line hidden
             this.Write(".Cast<");
             
-            #line 86 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 89 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.InputParameterTypeFullName));
             
             #line default
             #line hidden
             this.Write(">(), ");
             
-            #line 86 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 89 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(nameInternalMethod));
             
             #line default
             #line hidden
             this.Write(");\r\n\t\t}\r\n\r\n\t\tprivate void ");
             
-            #line 89 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 92 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(nameInternalMethod));
             
             #line default
             #line hidden
             this.Write(" (");
             
-            #line 89 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 92 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.InputParameterTypeFullName));
             
             #line default
             #line hidden
             this.Write(" ");
             
-            #line 89 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 92 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.UpdateEntityName));
             
             #line default
             #line hidden
             this.Write(")\r\n\t\t{\r\n\t\t\t");
             
-            #line 91 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
+            #line 94 "C:\Users\ripo9018\source\repos\IfcQueryLanguage\CLIF.codegenerator\LinqModificationTemplate.tt"
             this.Write(this.ToStringHelper.ToStringWithCulture(this.MethodBody));
             
             #line default

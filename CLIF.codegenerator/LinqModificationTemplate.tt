@@ -81,8 +81,11 @@ namespace <#=this.ClassNamespace#>
 
 		<#string nameInternalMethod = "InternalUpdateMethod";#>
 
+		private Xbim.Common.IModel model;
+
 		public <#=returnTypeString#> <#=LinqModificationTemplate.interfaceMethod.Name#>(<#=finalParamString#>)
 		{
+			this.model = <#=storeName#>.Model;
 			<#=storeName#>.ForEach<<#=this.InputParameterTypeFullName#>>(<#=entitiesName#>.Cast<<#=this.InputParameterTypeFullName#>>(), <#=nameInternalMethod#>);
 		}
 
