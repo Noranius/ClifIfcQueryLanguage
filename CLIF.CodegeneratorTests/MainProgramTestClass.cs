@@ -17,7 +17,19 @@ namespace CLIF.Tests
         [TestMethod()]
         public void TestQueryFile()
         {
-            CLIF.QueryEnvironment.Program.Main(new string[] { "-f=\"TestData\\QueryTestFile.txt\"", "-i=\"Testdata\\B_Damage_Types.ifc\"", "-v" });
+            CLIF.QueryEnvironment.Program.Main(new string[] { "-f=\"TestData\\QueryTestFile.txt\"", "-i=\"Testdata\\B_Damage_Types.ifc\"", "-v", "-s=newmodel.ifc" });
+        }
+
+        [TestMethod()]
+        public void TestInsertDefect()
+        {
+            CLIF.QueryEnvironment.Program.Main(new string[] { "-f=\"TestData\\InsertNewDefect.txt\"", "-i=\"Testdata\\TesterForDefectInsertion.ifc\"", "-v", "-s=modelWithDefect.ifc" });
+        }
+
+        [TestMethod()]
+        public void TestUserInterface()
+        {
+            //CLIF.QueryEnvironment.Program.Main(new string[] { "-u", "-v", "-i=\"Testdata\\TesterForDefectInsertion.ifc\"", "-s=modelWithDefect.ifc" });
         }
     }
 }
