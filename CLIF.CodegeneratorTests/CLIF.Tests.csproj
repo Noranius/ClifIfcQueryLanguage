@@ -22,6 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Testdata\TesterForDefectInsertion.ifc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Testdata\B_Damage_Types.ifc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -29,6 +32,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Testdata\G_Beam_with_corroded_reinforcement_Round_IfcVoidingFeature.ifc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Testdata\InsertNewDefect.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Update="Testdata\QueryTestFile.txt">

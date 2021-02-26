@@ -72,7 +72,43 @@ namespace CLIF.QueryEnvironment
                             }
                         }
                     }
+                    else if (Program.runOptions.UserInputInterface)
+                    {
+                        string query = string.Empty;
+                        Console.WriteLine("CLIF Query Environment");
+                        Console.WriteLine("Operating on " + Path.GetFullPath(Program.runOptions.IfcPath));
+                        bool exit = false;
+                        while (!exit)
+                        {
+                            Console.Write("CLIF>> ");
+                            query = Console.ReadLine();
+                            if (string.IsNullOrWhiteSpace(query))
+                            {
+                                continue;
+                            }
+                            else if (query.Equals("exit"))
+                            {
+                                exit = true;
+                            }
+                            else
+                            {
+                                try
+                                {
+                                    Program.ProcessQuery(query);
+                                }
+                                catch (Exception ex)
+                                {
+                                    Console.Error.WriteLine(ex.ToString());
+                                }
+                            }
+                        }
+                    }
                     
+                    //save the results
+                    if (Program.runOptions.SaveFile)
+                    {
+                        Program.engine.SaveModel(Program.runOptions.PathToSave);
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -94,16 +130,18 @@ namespace CLIF.QueryEnvironment
         private static void RunOptions(ClifQueryOptions options)
         {
             Program.runOptions = options;
-            if (!Program.runOptions.HasQuery)
+            if (!Program.runOptions.HasQuery
+                && !Program.runOptions.UserInputInterface)
             {
-                Console.Error.WriteLine("Neither a query file nor a single query has been provided. Please use either --command or --queryFile");
+                Console.Error.WriteLine("Neither a query file, a single query, nor the user input has been provided. Please check the help via --help");
                 Program.optionParseSuccess = false;
                 return;
             }
 
-            if (Program.runOptions.HasSingleQuery && Program.runOptions.HasFile)
+            if (Program.runOptions.HasSingleQuery && (Program.runOptions.HasFile || Program.runOptions.UserInputInterface)
+                || Program.runOptions.HasFile && Program.runOptions.UserInputInterface)
             {
-                Console.Error.WriteLine("Please provide either a single query or a query file, but not both in parallel");
+                Console.Error.WriteLine("Please provide either a single query, a query file or use the user interface, but not multiple in parallel");
                 Program.optionParseSuccess = false;
                 return;
             }
@@ -119,12 +157,29 @@ namespace CLIF.QueryEnvironment
                 Program.runOptions.QueryFile = Program.runOptions.QueryFile.Substring(1).Replace("\"", string.Empty);
             }
 
-            if (Program.runOptions.IfcPath[0] == '=')
-            {
-                Program.runOptions.IfcPath = runOptions.IfcPath.Substring(1).Replace("\"", string.Empty); 
-            }
+            Program.runOptions.IfcPath = Program.TrimPath(runOptions.IfcPath); 
+            Program.runOptions.PathToSave = Program.TrimPath(Program.runOptions.PathToSave);
 
             Program.optionParseSuccess = true;
+        }
+
+        /// <summary>
+        /// Trims a path to the proper style
+        /// </summary>
+        /// <param name="pathToTrim"></param>
+        /// <returns></returns>
+        private static string TrimPath(string pathToTrim)
+        {
+            string result = pathToTrim;
+            if (!string.IsNullOrWhiteSpace(result))
+            {
+                if (result[0] == '=')
+                {
+                    result = result.Substring(1);
+                }
+                return result.Replace("\"", string.Empty);
+            }
+            return pathToTrim;
         }
 
         /// <summary>
@@ -177,6 +232,10 @@ namespace CLIF.QueryEnvironment
                     {
                         Console.WriteLine("Info: Empty list returned. Consider to check the query.");
                     }
+                }
+                else if (queryResult.ReturnedObject is Xbim.Common.IPersistEntity)
+                {
+                    Console.WriteLine(queryResult.ReturnedObject.ToString());
                 }
             }
             else
