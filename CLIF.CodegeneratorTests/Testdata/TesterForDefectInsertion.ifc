@@ -175,8 +175,6 @@ DATA;
 #328= IFCRELDEFINESBYPROPERTIES('0pP_$umfv0Dgz6lob3Z7ZM',#42,$,$,(#123),#324);
 #332= IFCRELASSOCIATESMATERIAL('04zVryyNH8xe2oFYHp6b6j',#42,$,$,(#194),#218);
 #344= IFCPRESENTATIONLAYERASSIGNMENT('S-BEAM-____-OTLN',$,(#165,#183,#227,#231),$);
-#400= IFCVIRTUALELEMENT('xQOSoN5U_EuGLCQojUo8-g',#42,'Facility part: structure',$,'Facility part',$,$,$);
-#401= IFCRELAGGREGATES('VN5S4ivD406aw9n-cm2MSw',#42,'Civil element grouping','Group elements for structure',#400,(#244));
 
 /*building element*/
 #244= IFCBEAM('091e0b9f052a49d2b9af35c7fe711a91',#42,'Concrete - Rectangular Beam: 300 x 600mm:322549',$,'300 x 600mm',#242,#233,'322549',.BEAM.);

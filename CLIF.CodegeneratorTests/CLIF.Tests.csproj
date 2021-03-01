@@ -22,6 +22,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="Testdata\BasinTessellation.ifc">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Update="Testdata\TesterForDefectInsertion.ifc">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

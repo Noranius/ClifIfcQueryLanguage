@@ -6,6 +6,7 @@ using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Xbim.Common;
 using CLIF.QueryEngine;
+using Xbim.Ifc4.MeasureResource;
 
 namespace CLIF.Tests
 {
