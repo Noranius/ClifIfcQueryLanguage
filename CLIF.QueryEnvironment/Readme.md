@@ -11,6 +11,8 @@ CLIF.QueryEnvironment.exe [options]
   -i, --ifc          Required. Ifc file to query
 
   -f, --queryFile    Text file with subsequent queries
+  
+  -u, --userInput    Type your queries one after another into the interface
 
   -v, --verbose      Shows additional processing information
 
@@ -38,3 +40,14 @@ from ifcEntity in model.Instances where ifcEntity.ExpressType.ExpressName == "If
 from ifcEntity in model.Instances where ifcEntity.ExpressType.Name == "IfcBeam" select ifcEntity
 ```
 
+## Interactive user interface
+
+By using the option -u and provide a file to operate on, a command line interface is started. You can type there your queries and execute them by hitting return. The user interface starts with the lines.
+
+```
+CLIF Query Environment
+Operating on [your ifc file]
+Clif>> 
+```
+
+- Going on from this, just type in your queries and retrieve the results. Use `exit` to leave the environment.

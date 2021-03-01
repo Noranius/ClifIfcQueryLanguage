@@ -75,11 +75,13 @@ namespace CLIF.QueryEnvironment
                     else if (Program.runOptions.UserInputInterface)
                     {
                         string query = string.Empty;
+                        Console.ForegroundColor = ConsoleColor.Cyan;
                         Console.WriteLine("CLIF Query Environment");
                         Console.WriteLine("Operating on " + Path.GetFullPath(Program.runOptions.IfcPath));
                         bool exit = false;
                         while (!exit)
                         {
+                            Console.ForegroundColor = ConsoleColor.Gray;
                             Console.Write("CLIF>> ");
                             query = Console.ReadLine();
                             if (string.IsNullOrWhiteSpace(query))
@@ -98,10 +100,15 @@ namespace CLIF.QueryEnvironment
                                 }
                                 catch (Exception ex)
                                 {
-                                    Console.Error.WriteLine(ex.ToString());
+                                    Program.ReportError(ex.ToString());
                                 }
                             }
                         }
+                    }
+                    else
+                    {
+                        Program.ReportError("Please use either a single command (-q), a query file (-f) or the user interface (-u)");
+                        return;
                     }
                     
                     //save the results
@@ -112,7 +119,7 @@ namespace CLIF.QueryEnvironment
                 }
                 catch (Exception ex)
                 {
-                    Console.Error.WriteLine(ex.ToString());
+                    Program.ReportError(ex.ToString());
                 }
             }
         }
@@ -133,7 +140,7 @@ namespace CLIF.QueryEnvironment
             if (!Program.runOptions.HasQuery
                 && !Program.runOptions.UserInputInterface)
             {
-                Console.Error.WriteLine("Neither a query file, a single query, nor the user input has been provided. Please check the help via --help");
+                Program.ReportError("Neither a query file, a single query, nor the user input has been provided. Please check the help via --help");
                 Program.optionParseSuccess = false;
                 return;
             }
@@ -141,7 +148,7 @@ namespace CLIF.QueryEnvironment
             if (Program.runOptions.HasSingleQuery && (Program.runOptions.HasFile || Program.runOptions.UserInputInterface)
                 || Program.runOptions.HasFile && Program.runOptions.UserInputInterface)
             {
-                Console.Error.WriteLine("Please provide either a single query, a query file or use the user interface, but not multiple in parallel");
+                Program.ReportError("Please provide either a single query, a query file or use the user interface, but not multiple in parallel");
                 Program.optionParseSuccess = false;
                 return;
             }
@@ -194,17 +201,17 @@ namespace CLIF.QueryEnvironment
 
                 if (lineCounter != -1)
                 {
-                    Console.WriteLine("Processing query file line " + lineCounter);
+                    Program.ReportVerbose("Processing query file line " + lineCounter);
                 }
 
-                Console.Write("Processed query: ");
+                Program.ReportVerbose("Processed query: ");
                 if (query.Length > Program.maximumQueryLengthToDisplay)
                 {
-                    Console.WriteLine(query.Substring(0, Program.maximumQueryLengthToDisplay) + "...");
+                    Program.ReportVerbose(query.Substring(0, Program.maximumQueryLengthToDisplay) + "...");
                 }
                 else
                 {
-                    Console.WriteLine(query);
+                    Program.ReportVerbose(query);
                 } 
             }
 
@@ -213,7 +220,9 @@ namespace CLIF.QueryEnvironment
             if (!queryResult.Success)
             {
                 if (queryResult.Error != null)
-                    Console.Error.WriteLine("Error at executing query. " + queryResult.Error.ToString());
+                {
+                    Program.ReportError("Error at executing query. " + queryResult.Error.ToString());
+                }
                 return;
             }
 
@@ -224,24 +233,50 @@ namespace CLIF.QueryEnvironment
                     int resultCount = 0;
                     foreach (var resultEntity in resultList)
                     {
-                        Console.WriteLine(resultEntity.ToString());
+                        Program.ReportQueryResult(resultEntity.ToString());
                         resultCount++;
                     }
 
                     if (resultCount < 1)
                     {
-                        Console.WriteLine("Info: Empty list returned. Consider to check the query.");
+                        Program.ReportQueryResult("Info: Empty list returned. Consider to check the query.");
                     }
                 }
                 else if (queryResult.ReturnedObject is Xbim.Common.IPersistEntity)
                 {
-                    Console.WriteLine(queryResult.ReturnedObject.ToString());
+                    Program.ReportQueryResult(queryResult.ReturnedObject.ToString());
                 }
             }
             else
             {
-                Console.WriteLine("Query sucessful executed.");
+                Program.ReportQueryResult("Query sucessful executed.");
             }
+        }
+
+        /// <summary>
+        /// print error on screen
+        /// </summary>
+        /// <param name="errorText"></param>
+        private static void ReportError(string errorText)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Error.WriteLine(errorText);
+        }
+
+        private static void ReportQueryResult (string result)
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine(result);
+        }
+
+        /// <summary>
+        /// return information
+        /// </summary>
+        /// <param name="info"></param>
+        private static void ReportVerbose(string info)
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine(info);
         }
     }
 }
