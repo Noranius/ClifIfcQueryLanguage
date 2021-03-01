@@ -50,4 +50,4 @@ Operating on [your ifc file]
 Clif>> 
 ```
 
-- Going on from this, just type in your queries and retrieve the results. Use `exit` to leave the environment.
+Going on from this, just type in your queries and retrieve the results. Use `exit` to leave the environment.
