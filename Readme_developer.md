@@ -10,7 +10,7 @@ The downside is that LINQ does not offer queries for updating, inserting and del
 
 ## Process pipeline
 
-![process pipeline](./figures/process pipeline.svg)
+![process pipeline](./figures/process_pipeline.svg)
 
 In the first step, a user provides the input, this means the query. Due to the extension of LINQ, the query has to be analyzed and split up into several parts. After that, the code generation and compilation follows. Finally, the results are returned after the execution of the query.
 
